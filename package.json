@@ -6,9 +6,9 @@
   "scripts": {
     "test": "ts-node src/test.ts",
     "build": "tsc",
-    "start": "ts-node src/server.ts",
+    "start": "node dist/src/server.js",
     "dev": "ts-node src/server.ts",
-    "vercel-build": "tsc"
+    "postinstall": "tsc"
   },
   "keywords": [],
   "author": "",

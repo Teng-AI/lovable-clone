@@ -4,7 +4,6 @@ import path from 'path';
 import fs from 'fs';
 import dotenv from 'dotenv';
 import { generateCode } from './codeGenerator';
-import { generateCodeWithAnthropicAPI } from './anthropicGenerator';
 
 // Load environment variables from .env file for local development
 dotenv.config();
@@ -30,18 +29,7 @@ app.post('/api/generate', async (req, res) => {
 
     console.log(`🔄 Generating code for: "${prompt}"`);
     
-    let result;
-    try {
-      // Try Claude Code SDK first (for local development)
-      result = await generateCode(prompt);
-      console.log('✅ Generated using Claude Code SDK');
-    } catch (sdkError) {
-      console.log('⚠️ Claude Code SDK failed, falling back to Anthropic API');
-      console.log('SDK Error:', sdkError);
-      // Fall back to Anthropic API
-      result = await generateCodeWithAnthropicAPI(prompt);
-      console.log('✅ Generated using Anthropic API fallback');
-    }
+    const result = await generateCode(prompt);
     
     // Save generated files to output directory
     const outputDir = path.join(__dirname, '../output');

@@ -1,26 +1,24 @@
-# Lovable Clone - AI Code Generator
+# Lovable Clone - Claude Code SDK Edition
 
-A Lovable-inspired code generation platform powered by Claude Code SDK. Generate complete web applications through natural language prompts.
+A Lovable-inspired code generation tool powered by the Claude Code SDK.
 
 ## ✨ Features
 
-- **AI-powered code generation** using Claude Code SDK
-- **Beautiful glassmorphism UI** inspired by Lovable
-- **Single-file generation** with HTML, CSS, and JavaScript
-- **Real-time code preview** and download
-- **Responsive design** that works on all devices
-- **Example prompts** to get started quickly
+- Generate complete, working applications using natural language prompts
+- Modern glassmorphism UI design inspired by Lovable
+- Direct integration with Claude Code SDK for high-quality code generation
+- Real-time code generation with progress feedback
 
 ## 🚀 Live Demo
 
-Visit the deployed application: [https://lovable-clone-rosy-two.vercel.app](https://lovable-clone-rosy-two.vercel.app)
+Deployed on Render: [Coming Soon - Deploy Instructions Below]
 
 ## 🛠️ Tech Stack
 
 - **Frontend**: HTML, CSS, JavaScript (Vanilla)
 - **Backend**: TypeScript, Express.js
 - **AI**: Claude Code SDK
-- **Deployment**: Vercel
+- **Deployment**: Render
 - **Styling**: Glassmorphism effects with CSS backdrop-filter
 
 ## 📦 Installation & Setup
@@ -58,7 +56,7 @@ Visit the deployed application: [https://lovable-clone-rosy-two.vercel.app](http
 5. **Open your browser**
    Navigate to `http://localhost:3000`
 
-## 🌍 Deployment to Vercel
+## 🌍 Deployment to Render
 
 ### Method 1: Deploy via GitHub (Recommended)
 
@@ -69,51 +67,47 @@ Visit the deployed application: [https://lovable-clone-rosy-two.vercel.app](http
    git push origin main
    ```
 
-2. **Connect to Vercel**
-   - Go to [Vercel Dashboard](https://vercel.com/dashboard)
-   - Click "New Project"
+2. **Connect to Render**
+   - Go to [Render Dashboard](https://render.com/dashboard)
+   - Click "New Web Service"
    - Import your GitHub repository
 
-3. **Configure Environment Variables**
-   In Vercel dashboard:
-   - Go to Project Settings → Environment Variables
+3. **Configure Service**
+   - **Build Command**: `npm install && npm run build`
+   - **Start Command**: `npm start`
+   - **Environment**: Node
+
+4. **Configure Environment Variables**
+   In Render dashboard:
    - Add: `CLAUDE_API_KEY_1` = `your_claude_api_key_here`
+   - Add: `ANTHROPIC_API_KEY` = `your_claude_api_key_here`
+   - Add: `NODE_ENV` = `production`
 
-4. **Deploy**
-   - Vercel will automatically build and deploy
-   - Your app will be live at `https://your-project-name.vercel.app`
+5. **Deploy**
+   - Render will automatically build and deploy
+   - Your app will be live at `https://your-service-name.onrender.com`
 
-### Method 2: Deploy via Vercel CLI
+### Why Render over Vercel?
 
-1. **Install Vercel CLI**
-   ```bash
-   npm i -g vercel
-   ```
+The Claude Code SDK is designed as a CLI tool that needs:
+- Longer execution times (up to 5+ minutes)
+- Full Node.js environment 
+- Shell access for running commands
 
-2. **Deploy**
-   ```bash
-   vercel --prod
-   ```
-
-3. **Set environment variables**
-   ```bash
-   vercel env add CLAUDE_API_KEY_1
-   ```
+Render provides a more suitable environment for CLI tools compared to serverless functions.
 
 ## 🏗️ Project Structure
 
 ```
 lovable-clone/
-├── api/
-│   └── generate.ts          # Vercel serverless function
 ├── public/
-│   ├── index.html          # Main UI (served by Vercel)
+│   ├── index.html          # Main UI
 │   └── output/             # Generated files directory
 ├── src/
-│   ├── codeGenerator.ts    # Core AI logic
-│   ├── server.ts          # Express server (local dev)
+│   ├── codeGenerator.ts    # Core Claude Code SDK integration
+│   ├── server.ts          # Express server
 │   └── types.ts           # TypeScript type definitions
-├── vercel.json            # Vercel configuration
+├── render.yaml            # Render configuration
 ├── package.json           # Dependencies and scripts
 └── tsconfig.json          # TypeScript configuration
 ```
