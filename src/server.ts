@@ -14,7 +14,7 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname, '..')));
+app.use(express.static(path.join(__dirname, '../../public')));
 
 // API endpoint for code generation
 app.post('/api/generate', async (req, res) => {
@@ -32,7 +32,7 @@ app.post('/api/generate', async (req, res) => {
     const result = await generateCode(prompt);
     
     // Save generated files to output directory
-    const outputDir = path.join(__dirname, '../output');
+    const outputDir = path.join(__dirname, '../../output');
     if (!fs.existsSync(outputDir)) {
       fs.mkdirSync(outputDir, { recursive: true });
     }
@@ -71,7 +71,7 @@ app.post('/api/generate', async (req, res) => {
 });
 
 // Serve output files
-app.use('/output', express.static(path.join(__dirname, '../output')));
+app.use('/output', express.static(path.join(__dirname, '../../output')));
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
@@ -84,7 +84,7 @@ app.get('/api/health', (req, res) => {
 
 // Serve the main UI
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../public/index.html'));
+  res.sendFile(path.join(__dirname, '../../public/index.html'));
 });
 
 // Start server
