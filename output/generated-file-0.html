@@ -3,253 +3,174 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>L'Excellence | Three Michelin Stars</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
+    <title>Simple Calculator</title>
     <style>
-        * {
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
             margin: 0;
-            padding: 0;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+
+        .calculator {
+            background-color: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+
+        .display {
+            width: 100%;
+            height: 60px;
+            margin-bottom: 10px;
+            background-color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 24px;
+            text-align: right;
+            padding: 10px;
             box-sizing: border-box;
         }
 
-        body {
-            font-family: 'Montserrat', sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background-color: #fafafa;
-        }
-
-        .header {
-            height: 100vh;
-            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-                        url('https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?auto=format&fit=crop&w=1920&q=80');
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            color: white;
-        }
-
-        .logo {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
-            opacity: 0;
-            animation: fadeInUp 1s ease forwards;
-        }
-
-        .subtitle {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-            opacity: 0;
-            animation: fadeInUp 1s ease 0.5s forwards;
-        }
-
-        .cta-button {
-            background: transparent;
-            border: 2px solid white;
-            color: white;
-            padding: 1rem 2rem;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            opacity: 0;
-            animation: fadeInUp 1s ease 1s forwards;
-        }
-
-        .cta-button:hover {
-            background: white;
-            color: #333;
-        }
-
-        .section {
-            padding: 6rem 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .section-title {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 2.5rem;
-            margin-bottom: 2rem;
-            text-align: center;
-        }
-
-        .menu-grid {
+        .buttons {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
         }
 
-        .menu-item {
-            background: white;
-            padding: 2rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
-        }
-
-        .menu-item:hover {
-            transform: translateY(-5px);
-        }
-
-        .menu-item h3 {
-            font-family: 'Cormorant Garamond', serif;
-            margin-bottom: 1rem;
-        }
-
-        .reservation-form {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-        }
-
-        .form-group input,
-        .form-group select {
-            width: 100%;
-            padding: 0.8rem;
-            border: 1px solid #ddd;
-            font-size: 1rem;
-        }
-
-        .submit-button {
-            background: #333;
-            color: white;
+        button {
+            padding: 15px;
+            font-size: 18px;
             border: none;
-            padding: 1rem 2rem;
-            font-size: 1.1rem;
+            border-radius: 5px;
             cursor: pointer;
-            transition: background 0.3s ease;
-            width: 100%;
+            background-color: #e0e0e0;
+            transition: background-color 0.2s;
         }
 
-        .submit-button:hover {
-            background: #555;
+        button:hover {
+            background-color: #d0d0d0;
         }
 
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        button.operator {
+            background-color: #ff9500;
+            color: white;
         }
 
-        @media (max-width: 768px) {
-            .logo {
-                font-size: 2.5rem;
-            }
-            
-            .section {
-                padding: 4rem 1rem;
-            }
+        button.operator:hover {
+            background-color: #ff8000;
+        }
+
+        button.equals {
+            background-color: #2196f3;
+            color: white;
+        }
+
+        button.equals:hover {
+            background-color: #1976d2;
+        }
+
+        button.clear {
+            background-color: #ff4444;
+            color: white;
+        }
+
+        button.clear:hover {
+            background-color: #cc0000;
         }
     </style>
 </head>
 <body>
-    <header class="header">
-        <h1 class="logo">L'Excellence</h1>
-        <p class="subtitle">Three Michelin Stars | A Culinary Journey</p>
-        <a href="#reservation" class="cta-button">Reserve a Table</a>
-    </header>
-
-    <section id="menu" class="section">
-        <h2 class="section-title">Our Tasting Menu</h2>
-        <div class="menu-grid">
-            <div class="menu-item">
-                <h3>First Act</h3>
-                <p>Caviar served on a cloud of cauliflower cream, accompanied by champagne foam and gold leaf</p>
-            </div>
-            <div class="menu-item">
-                <h3>Second Act</h3>
-                <p>Hand-dived scallops with Jerusalem artichoke purée, black truffle, and aged kombu</p>
-            </div>
-            <div class="menu-item">
-                <h3>Third Act</h3>
-                <p>A5 Wagyu beef with wild mushrooms, bone marrow sauce, and seasonal vegetables</p>
-            </div>
+    <div class="calculator">
+        <input type="text" class="display" readonly>
+        <div class="buttons">
+            <button class="clear">C</button>
+            <button class="operator">±</button>
+            <button class="operator">%</button>
+            <button class="operator">÷</button>
+            <button>7</button>
+            <button>8</button>
+            <button>9</button>
+            <button class="operator">×</button>
+            <button>4</button>
+            <button>5</button>
+            <button>6</button>
+            <button class="operator">-</button>
+            <button>1</button>
+            <button>2</button>
+            <button>3</button>
+            <button class="operator">+</button>
+            <button>0</button>
+            <button>.</button>
+            <button class="equals" style="grid-column: span 2;">=</button>
         </div>
-    </section>
-
-    <section id="reservation" class="section">
-        <h2 class="section-title">Make a Reservation</h2>
-        <form class="reservation-form" id="reservationForm">
-            <div class="form-group">
-                <label for="name">Full Name</label>
-                <input type="text" id="name" required>
-            </div>
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" required>
-            </div>
-            <div class="form-group">
-                <label for="date">Date</label>
-                <input type="date" id="date" required>
-            </div>
-            <div class="form-group">
-                <label for="time">Time</label>
-                <select id="time" required>
-                    <option value="">Select time</option>
-                    <option value="18:00">6:00 PM</option>
-                    <option value="18:30">6:30 PM</option>
-                    <option value="19:00">7:00 PM</option>
-                    <option value="19:30">7:30 PM</option>
-                    <option value="20:00">8:00 PM</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="guests">Number of Guests</label>
-                <select id="guests" required>
-                    <option value="">Select number of guests</option>
-                    <option value="1">1 Person</option>
-                    <option value="2">2 People</option>
-                    <option value="3">3 People</option>
-                    <option value="4">4 People</option>
-                    <option value="5">5 People</option>
-                    <option value="6">6 People</option>
-                </select>
-            </div>
-            <button type="submit" class="submit-button">Request Reservation</button>
-        </form>
-    </section>
+    </div>
 
     <script>
-        document.getElementById('reservationForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // In a real implementation, this would send the data to a server
-            alert('Thank you for your reservation request. We will contact you shortly to confirm.');
-            this.reset();
-        });
+        document.addEventListener('DOMContentLoaded', () => {
+            const display = document.querySelector('.display');
+            const buttons = document.querySelectorAll('button');
+            let firstOperand = '';
+            let operator = '';
+            let waitingForSecondOperand = false;
 
-        // Set minimum date to today
-        const dateInput = document.getElementById('date');
-        const today = new Date().toISOString().split('T')[0];
-        dateInput.min = today;
+            buttons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const value = button.textContent;
 
-        // Smooth scroll for navigation
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
+                    if (value >= '0' && value <= '9' || value === '.') {
+                        if (waitingForSecondOperand) {
+                            display.value = value;
+                            waitingForSecondOperand = false;
+                        } else {
+                            display.value = display.value === '0' ? value : display.value + value;
+                        }
+                    } else if (['+', '-', '×', '÷', '%'].includes(value)) {
+                        firstOperand = display.value;
+                        operator = value;
+                        waitingForSecondOperand = true;
+                    } else if (value === '=') {
+                        const secondOperand = display.value;
+                        if (operator && firstOperand) {
+                            display.value = calculate(firstOperand, operator, secondOperand);
+                            firstOperand = '';
+                            operator = '';
+                            waitingForSecondOperand = false;
+                        }
+                    } else if (value === 'C') {
+                        display.value = '0';
+                        firstOperand = '';
+                        operator = '';
+                        waitingForSecondOperand = false;
+                    } else if (value === '±') {
+                        display.value = (-parseFloat(display.value)).toString();
+                    }
                 });
             });
+
+            function calculate(first, op, second) {
+                const a = parseFloat(first);
+                const b = parseFloat(second);
+                switch (op) {
+                    case '+':
+                        return (a + b).toString();
+                    case '-':
+                        return (a - b).toString();
+                    case '×':
+                        return (a * b).toString();
+                    case '÷':
+                        return b !== 0 ? (a / b).toString() : 'Error';
+                    case '%':
+                        return (a * b / 100).toString();
+                    default:
+                        return second;
+                }
+            }
         });
     </script>
 </body>

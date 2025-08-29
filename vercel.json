@@ -23,5 +23,14 @@
       "src": "/(.*)",
       "dest": "/public/$1"
     }
-  ]
+  ],
+  "functions": {
+    "api/generate.ts": {
+      "maxDuration": 60,
+      "memory": 1024
+    }
+  },
+  "env": {
+    "NODE_ENV": "production"
+  }
 }

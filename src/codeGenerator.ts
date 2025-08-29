@@ -2,7 +2,16 @@ import { query, SDKMessage } from "@anthropic-ai/claude-code";
 import { GeneratedCode, GeneratedFile } from "./types";
 
 export async function generateCode(prompt: string): Promise<GeneratedCode> {
+  // Ensure the API key is available for the Claude Code SDK
+  const apiKey = process.env.CLAUDE_API_KEY_1 || process.env.ANTHROPIC_API_KEY;
+  if (!apiKey) {
+    throw new Error('Claude API key not found. Please set CLAUDE_API_KEY_1 or ANTHROPIC_API_KEY environment variable.');
+  }
+  
+  // Set the API key for the SDK - this is required for Vercel deployment
+  process.env.ANTHROPIC_API_KEY = apiKey;
   console.log(`🔄 Generating code for prompt: "${prompt}"`);
+  console.log(`🔑 Using API key: ${apiKey.substring(0, 8)}...${apiKey.substring(apiKey.length - 4)}`);
   
   const systemPrompt = `You are a code generator that creates complete, working applications. 
 IMPORTANT: Since you may not have write permissions, always provide the complete code in markdown code blocks in your response.
@@ -20,21 +29,38 @@ Generate a complete, working implementation based on the user's request and show
   const messages: SDKMessage[] = [];
   
   try {
-    for await (const message of query({
+    const queryOptions = {
       prompt,
       options: { 
         customSystemPrompt: systemPrompt,
         model: "claude-3-5-sonnet-20241022"
       }
-    })) {
+    };
+    
+    console.log(`🚀 Starting Claude Code SDK query...`);
+    
+    for await (const message of query(queryOptions)) {
       console.log(`📝 Received message type: ${message.type}`);
       messages.push(message);
     }
     
+    console.log(`📊 Query completed, parsing messages...`);
     return parseCodeFromMessages(messages);
   } catch (error) {
     console.error('❌ Error generating code:', error);
-    throw new Error(`Code generation failed: ${error}`);
+    
+    // More specific error messages for debugging
+    if (error instanceof Error) {
+      if (error.message.includes('process exited with code 1')) {
+        throw new Error('Claude Code SDK authentication failed. Please check your API key configuration.');
+      } else if (error.message.includes('ECONNREFUSED')) {
+        throw new Error('Network connection failed. Please check your internet connection.');
+      } else if (error.message.includes('timeout')) {
+        throw new Error('Request timed out. Please try again with a shorter prompt.');
+      }
+    }
+    
+    throw new Error(`Code generation failed: ${error instanceof Error ? error.message : String(error)}`);
   }
 }
 
