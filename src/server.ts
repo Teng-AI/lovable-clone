@@ -16,8 +16,11 @@ app.use(cors());
 app.use(express.json());
 
 // Determine if we're in development (ts-node) or production (compiled)
-const isDev = __dirname.includes('src');
+const isDev = __dirname.includes('src') && !__dirname.includes('dist');
 const publicPath = isDev ? path.join(__dirname, '../public') : path.join(__dirname, '../../public');
+console.log(`🔧 Environment: ${isDev ? 'Development' : 'Production'}`);
+console.log(`📁 Public path: ${publicPath}`);
+console.log(`📍 Current __dirname: ${__dirname}`);
 app.use(express.static(publicPath));
 
 // API endpoint for code generation
@@ -76,6 +79,7 @@ app.post('/api/generate', async (req, res) => {
 
 // Serve output files  
 const outputPath = isDev ? path.join(__dirname, '../output') : path.join(__dirname, '../../output');
+console.log(`📂 Output path: ${outputPath}`);
 app.use('/output', express.static(outputPath));
 
 // Health check endpoint
@@ -90,7 +94,15 @@ app.get('/api/health', (req, res) => {
 // Serve the main UI
 app.get('/', (req, res) => {
   const indexPath = isDev ? path.join(__dirname, '../public/index.html') : path.join(__dirname, '../../public/index.html');
-  res.sendFile(indexPath);
+  console.log(`🏠 Serving index.html from: ${indexPath}`);
+  
+  // Check if file exists before serving
+  if (fs.existsSync(indexPath)) {
+    res.sendFile(indexPath);
+  } else {
+    console.error(`❌ index.html not found at: ${indexPath}`);
+    res.status(404).send(`File not found: ${indexPath}`);
+  }
 });
 
 // Start server
