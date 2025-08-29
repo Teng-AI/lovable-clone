@@ -16,7 +16,7 @@ app.use(cors());
 app.use(express.json());
 
 // Determine if we're in development (ts-node) or production (compiled)
-const isDev = __dirname.includes('src') && !__dirname.includes('dist');
+const isDev = !__dirname.includes('dist');
 const publicPath = isDev ? path.join(__dirname, '../public') : path.join(__dirname, '../../public');
 console.log(`🔧 Environment: ${isDev ? 'Development' : 'Production'}`);
 console.log(`📁 Public path: ${publicPath}`);
