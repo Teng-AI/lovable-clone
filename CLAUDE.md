@@ -1,0 +1,1 @@
+- i am building a lovable clone, but i want to use the claude-code sdk

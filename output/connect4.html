@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connect 4</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f0f0f0;
+            margin: 20px;
+        }
+
+        #game-info {
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #333;
+        }
+
+        #board {
+            background-color: #0066cc;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .column {
+            display: inline-block;
+            vertical-align: top;
+            cursor: pointer;
+        }
+
+        .cell {
+            width: 60px;
+            height: 60px;
+            background-color: white;
+            border-radius: 50%;
+            margin: 5px;
+            transition: background-color 0.3s;
+        }
+
+        @media (max-width: 600px) {
+            .cell {
+                width: 40px;
+                height: 40px;
+                margin: 3px;
+            }
+        }
+
+        .red-piece {
+            background-color: #ff4444;
+        }
+
+        .yellow-piece {
+            background-color: #ffdd44;
+        }
+
+        .column:hover .cell:empty:last-child {
+            background-color: rgba(128, 128, 128, 0.2);
+        }
+
+        #reset-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #reset-button:hover {
+            background-color: #45a049;
+        }
+
+        .winning-cell {
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <div id="game-info">Red's Turn</div>
+    <div id="board"></div>
+    <button id="reset-button">Reset Game</button>
+
+    <script>
+        class Connect4 {
+            constructor() {
+                this.ROWS = 6;
+                this.COLS = 7;
+                this.board = Array(this.ROWS).fill().map(() => Array(this.COLS).fill(null));
+                this.currentPlayer = 'red';
+                this.gameOver = false;
+                this.createBoard();
+                this.setupEventListeners();
+            }
+
+            createBoard() {
+                const boardElement = document.getElementById('board');
+                boardElement.innerHTML = '';
+
+                for (let col = 0; col < this.COLS; col++) {
+                    const column = document.createElement('div');
+                    column.className = 'column';
+                    column.dataset.col = col;
+
+                    for (let row = this.ROWS - 1; row >= 0; row--) {
+                        const cell = document.createElement('div');
+                        cell.className = 'cell';
+                        cell.dataset.row = row;
+                        cell.dataset.col = col;
+                        column.appendChild(cell);
+                    }
+
+                    boardElement.appendChild(column);
+                }
+            }
+
+            setupEventListeners() {
+                document.getElementById('board').addEventListener('click', (e) => {
+                    if (this.gameOver) return;
+                    const column = e.target.closest('.column');
+                    if (column) {
+                        const col = parseInt(column.dataset.col);
+                        this.makeMove(col);
+                    }
+                });
+
+                document.getElementById('reset-button').addEventListener('click', () => {
+                    this.resetGame();
+                });
+            }
+
+            makeMove(col) {
+                const row = this.getLowestEmptyRow(col);
+                if (row === null) return;
+
+                this.board[row][col] = this.currentPlayer;
+                const cell = document.querySelector(`.cell[data-row="${row}"][data-col="${col}"]`);
+                cell.classList.add(`${this.currentPlayer}-piece`);
+
+                if (this.checkWin(row, col)) {
+                    this.handleWin();
+                    return;
+                }
+
+                if (this.checkDraw()) {
+                    this.handleDraw();
+                    return;
+                }
+
+                this.currentPlayer = this.currentPlayer === 'red' ? 'yellow' : 'red';
+                document.getElementById('game-info').textContent = `${this.currentPlayer.charAt(0).toUpperCase() + this.currentPlayer.slice(1)}'s Turn`;
+            }
+
+            getLowestEmptyRow(col) {
+                for (let row = 0; row < this.ROWS; row++) {
+                    if (!this.board[row][col]) {
+                        return row;
+                    }
+                }
+                return null;
+            }
+
+            checkWin(row, col) {
+                const directions = [
+                    [[0, 1], [0, -1]], // Horizontal
+                    [[1, 0], [-1, 0]], // Vertical
+                    [[1, 1], [-1, -1]], // Diagonal /
+                    [[1, -1], [-1, 1]] // Diagonal \
+                ];
+
+                for (const [dir1, dir2] of directions) {
+                    let count = 1;
+                    const winningCells = [[row, col]];
+
+                    // Check first direction
+                    let r = row + dir1[0];
+                    let c = col + dir1[1];
+                    while (r >= 0 && r < this.ROWS && c >= 0 && c < this.COLS && 
+                           this.board[r][c] === this.currentPlayer) {
+                        count++;
+                        winningCells.push([r, c]);
+                        r += dir1[0];
+                        c += dir1[1];
+                    }
+
+                    // Check opposite direction
+                    r = row + dir2[0];
+                    c = col + dir2[1];
+                    while (r >= 0 && r < this.ROWS && c >= 0 && c < this.COLS && 
+                           this.board[r][c] === this.currentPlayer) {
+                        count++;
+                        winningCells.push([r, c]);
+                        r += dir2[0];
+                        c += dir2[1];
+                    }
+
+                    if (count >= 4) {
+                        this.highlightWinningCells(winningCells);
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            highlightWinningCells(cells) {
+                cells.forEach(([row, col]) => {
+                    const cell = document.querySelector(`.cell[data-row="${row}"][data-col="${col}"]`);
+                    cell.classList.add('winning-cell');
+                });
+            }
+
+            checkDraw() {
+                return this.board.every(row => row.every(cell => cell !== null));
+            }
+
+            handleWin() {
+                this.gameOver = true;
+                document.getElementById('game-info').textContent = 
+                    `${this.currentPlayer.charAt(0).toUpperCase() + this.currentPlayer.slice(1)} Wins!`;
+            }
+
+            handleDraw() {
+                this.gameOver = true;
+                document.getElementById('game-info').textContent = "It's a Draw!";
+            }
+
+            resetGame() {
+                this.board = Array(this.ROWS).fill().map(() => Array(this.COLS).fill(null));
+                this.currentPlayer = 'red';
+                this.gameOver = false;
+                document.getElementById('game-info').textContent = "Red's Turn";
+                
+                const cells = document.querySelectorAll('.cell');
+                cells.forEach(cell => {
+                    cell.classList.remove('red-piece', 'yellow-piece', 'winning-cell');
+                });
+            }
+        }
+
+        // Start the game
+        const game = new Connect4();
+    </script>
+</body>
+</html>
