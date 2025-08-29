@@ -8,10 +8,16 @@ export async function generateCode(prompt: string): Promise<GeneratedCode> {
     throw new Error('Claude API key not found. Please set CLAUDE_API_KEY_1 or ANTHROPIC_API_KEY environment variable.');
   }
   
+  // Validate API key format
+  if (!apiKey.startsWith('sk-ant-')) {
+    throw new Error('Invalid API key format. Claude API keys should start with "sk-ant-"');
+  }
+  
   // Set the API key for the SDK - this is required for Vercel deployment
   process.env.ANTHROPIC_API_KEY = apiKey;
   console.log(`🔄 Generating code for prompt: "${prompt}"`);
-  console.log(`🔑 Using API key: ${apiKey.substring(0, 8)}...${apiKey.substring(apiKey.length - 4)}`);
+  console.log(`🔑 Using API key: ${apiKey.substring(0, 12)}...${apiKey.substring(apiKey.length - 8)}`);
+  console.log(`🔑 API key length: ${apiKey.length}`);
   
   const systemPrompt = `You are a code generator that creates complete, working applications. 
 IMPORTANT: Since you may not have write permissions, always provide the complete code in markdown code blocks in your response.
@@ -32,8 +38,8 @@ Generate a complete, working implementation based on the user's request and show
     const queryOptions = {
       prompt,
       options: { 
-        customSystemPrompt: systemPrompt,
-        model: "claude-3-5-sonnet-20241022"
+        customSystemPrompt: systemPrompt
+        // Using default model instead of specifying one
       }
     };
     

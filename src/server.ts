@@ -2,7 +2,11 @@ import express from 'express';
 import cors from 'cors';
 import path from 'path';
 import fs from 'fs';
+import dotenv from 'dotenv';
 import { generateCode } from './codeGenerator';
+
+// Load environment variables from .env file for local development
+dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -80,7 +84,7 @@ app.get('/api/health', (req, res) => {
 
 // Serve the main UI
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../index.html'));
+  res.sendFile(path.join(__dirname, '../public/index.html'));
 });
 
 // Start server
