@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Calculator</title>
+    <title>Tic-Tac-Toe Game</title>
     <style>
         * {
             margin: 0;
@@ -13,254 +13,317 @@
 
         body {
             font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            padding: 20px;
-        }
-
-        .calculator {
-            background: #fff;
-            border-radius: 15px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            padding: 25px;
-            width: 100%;
-            max-width: 320px;
-        }
-
-        .display {
-            background: #f8f9fa;
-            border: none;
-            border-radius: 10px;
-            font-size: 2rem;
-            font-weight: bold;
-            text-align: right;
-            padding: 20px;
-            margin-bottom: 20px;
-            width: 100%;
-            color: #333;
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .buttons {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-        }
-
-        button {
-            border: none;
-            border-radius: 10px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            padding: 20px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        button:active {
-            transform: translateY(0);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .number {
-            background: #e9ecef;
-            color: #333;
-        }
-
-        .number:hover {
-            background: #dee2e6;
-        }
-
-        .operator {
-            background: #007bff;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
         }
 
-        .operator:hover {
-            background: #0056b3;
-        }
-
-        .equals {
-            background: #28a745;
-            color: white;
-        }
-
-        .equals:hover {
-            background: #1e7e34;
-        }
-
-        .clear {
-            background: #dc3545;
-            color: white;
-        }
-
-        .clear:hover {
-            background: #c82333;
-        }
-
-        .zero {
-            grid-column: span 2;
+        .game-container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         }
 
         h1 {
-            text-align: center;
-            color: white;
-            margin-bottom: 20px;
+            margin-bottom: 1rem;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .game-status {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            height: 2rem;
+            font-weight: bold;
+        }
+
+        .game-board {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-template-rows: repeat(3, 100px);
+            gap: 5px;
+            margin: 0 auto 2rem;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .cell {
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
             font-size: 2rem;
+            font-weight: bold;
+            color: #333;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cell:hover:not(.taken) {
+            background: rgba(255, 255, 255, 1);
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .cell.taken {
+            cursor: not-allowed;
+        }
+
+        .cell.x {
+            color: #e74c3c;
+        }
+
+        .cell.o {
+            color: #3498db;
+        }
+
+        .winning-cell {
+            background: rgba(46, 204, 113, 0.8) !important;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .reset-btn {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .reset-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .score-board {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 2rem;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 1rem;
+            border-radius: 10px;
+        }
+
+        .score-item {
+            text-align: center;
+        }
+
+        .score-label {
+            font-size: 1rem;
+            opacity: 0.8;
+            margin-bottom: 0.5rem;
+        }
+
+        .score-value {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .player-x {
+            color: #e74c3c;
+        }
+
+        .player-o {
+            color: #3498db;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Simple Calculator</h1>
-        <div class="calculator">
-            <input type="text" class="display" id="display" readonly value="0">
-            <div class="buttons">
-                <button class="clear" onclick="clearDisplay()">C</button>
-                <button class="clear" onclick="deleteLast()">⌫</button>
-                <button class="operator" onclick="appendToDisplay('/')">/</button>
-                <button class="operator" onclick="appendToDisplay('*')">×</button>
-                
-                <button class="number" onclick="appendToDisplay('7')">7</button>
-                <button class="number" onclick="appendToDisplay('8')">8</button>
-                <button class="number" onclick="appendToDisplay('9')">9</button>
-                <button class="operator" onclick="appendToDisplay('-')">-</button>
-                
-                <button class="number" onclick="appendToDisplay('4')">4</button>
-                <button class="number" onclick="appendToDisplay('5')">5</button>
-                <button class="number" onclick="appendToDisplay('6')">6</button>
-                <button class="operator" onclick="appendToDisplay('+')">+</button>
-                
-                <button class="number" onclick="appendToDisplay('1')">1</button>
-                <button class="number" onclick="appendToDisplay('2')">2</button>
-                <button class="number" onclick="appendToDisplay('3')">3</button>
-                <button class="equals" onclick="calculate()" rowspan="2">=</button>
-                
-                <button class="number zero" onclick="appendToDisplay('0')">0</button>
-                <button class="number" onclick="appendToDisplay('.')">.</button>
+    <div class="game-container">
+        <h1>Tic-Tac-Toe</h1>
+        
+        <div class="score-board">
+            <div class="score-item">
+                <div class="score-label">Player X</div>
+                <div class="score-value player-x" id="scoreX">0</div>
+            </div>
+            <div class="score-item">
+                <div class="score-label">Draws</div>
+                <div class="score-value" id="scoreDraw">0</div>
+            </div>
+            <div class="score-item">
+                <div class="score-label">Player O</div>
+                <div class="score-value player-o" id="scoreO">0</div>
             </div>
         </div>
+
+        <div class="game-status" id="gameStatus">Player X's turn</div>
+        
+        <div class="game-board" id="gameBoard">
+            <button class="cell" data-index="0"></button>
+            <button class="cell" data-index="1"></button>
+            <button class="cell" data-index="2"></button>
+            <button class="cell" data-index="3"></button>
+            <button class="cell" data-index="4"></button>
+            <button class="cell" data-index="5"></button>
+            <button class="cell" data-index="6"></button>
+            <button class="cell" data-index="7"></button>
+            <button class="cell" data-index="8"></button>
+        </div>
+        
+        <button class="reset-btn" id="resetBtn">Reset Game</button>
     </div>
 
     <script>
-        let display = document.getElementById('display');
-        let currentInput = '0';
-        let shouldResetDisplay = false;
-
-        function updateDisplay() {
-            display.value = currentInput;
-        }
-
-        function appendToDisplay(value) {
-            if (shouldResetDisplay) {
-                currentInput = '0';
-                shouldResetDisplay = false;
-            }
-
-            if (currentInput === '0' && value !== '.') {
-                currentInput = value;
-            } else if (value === '.' && currentInput.includes('.')) {
-                // Don't add decimal if one already exists
-                return;
-            } else if (isOperator(value) && isOperator(currentInput.slice(-1))) {
-                // Replace last operator with new one
-                currentInput = currentInput.slice(0, -1) + value;
-            } else {
-                currentInput += value;
-            }
-
-            updateDisplay();
-        }
-
-        function isOperator(char) {
-            return ['+', '-', '*', '/'].includes(char);
-        }
-
-        function clearDisplay() {
-            currentInput = '0';
-            updateDisplay();
-        }
-
-        function deleteLast() {
-            if (currentInput.length > 1) {
-                currentInput = currentInput.slice(0, -1);
-            } else {
-                currentInput = '0';
-            }
-            updateDisplay();
-        }
-
-        function calculate() {
-            try {
-                // Replace × with * for evaluation
-                let expression = currentInput.replace(/×/g, '*');
+        class TicTacToe {
+            constructor() {
+                this.board = Array(9).fill('');
+                this.currentPlayer = 'X';
+                this.gameActive = true;
+                this.scores = {
+                    X: 0,
+                    O: 0,
+                    draw: 0
+                };
                 
-                // Validate expression
-                if (expression === '' || isOperator(expression.slice(-1))) {
-                    throw new Error('Invalid expression');
-                }
-
-                // Use Function constructor for safe evaluation
-                let result = Function('"use strict"; return (' + expression + ')')();
+                this.winningConditions = [
+                    [0, 1, 2], [3, 4, 5], [6, 7, 8], // rows
+                    [0, 3, 6], [1, 4, 7], [2, 5, 8], // columns
+                    [0, 4, 8], [2, 4, 6] // diagonals
+                ];
                 
-                // Handle division by zero and invalid results
-                if (!isFinite(result)) {
-                    throw new Error('Invalid calculation');
-                }
-
-                // Round to avoid floating point precision issues
-                result = Math.round(result * 100000000) / 100000000;
-                
-                currentInput = result.toString();
-                shouldResetDisplay = true;
-                updateDisplay();
-            } catch (error) {
-                currentInput = 'Error';
-                shouldResetDisplay = true;
-                updateDisplay();
-                setTimeout(() => {
-                    currentInput = '0';
-                    updateDisplay();
-                }, 1500);
+                this.initializeGame();
             }
-        }
-
-        // Keyboard support
-        document.addEventListener('keydown', function(event) {
-            const key = event.key;
             
-            if (key >= '0' && key <= '9') {
-                appendToDisplay(key);
-            } else if (key === '.') {
-                appendToDisplay('.');
-            } else if (key === '+' || key === '-') {
-                appendToDisplay(key);
-            } else if (key === '*') {
-                appendToDisplay('*');
-            } else if (key === '/') {
-                event.preventDefault(); // Prevent browser search
-                appendToDisplay('/');
-            } else if (key === 'Enter' || key === '=') {
-                event.preventDefault();
-                calculate();
-            } else if (key === 'Escape' || key === 'c' || key === 'C') {
-                clearDisplay();
-            } else if (key === 'Backspace') {
-                deleteLast();
+            initializeGame() {
+                this.cells = document.querySelectorAll('.cell');
+                this.gameStatus = document.getElementById('gameStatus');
+                this.resetBtn = document.getElementById('resetBtn');
+                this.scoreX = document.getElementById('scoreX');
+                this.scoreO = document.getElementById('scoreO');
+                this.scoreDraw = document.getElementById('scoreDraw');
+                
+                this.cells.forEach(cell => {
+                    cell.addEventListener('click', this.handleCellClick.bind(this));
+                });
+                
+                this.resetBtn.addEventListener('click', this.resetGame.bind(this));
+                this.updateGameStatus();
+                this.updateScoreBoard();
             }
+            
+            handleCellClick(event) {
+                const cell = event.target;
+                const index = parseInt(cell.dataset.index);
+                
+                if (this.board[index] !== '' || !this.gameActive) {
+                    return;
+                }
+                
+                this.makeMove(index, cell);
+            }
+            
+            makeMove(index, cell) {
+                this.board[index] = this.currentPlayer;
+                cell.textContent = this.currentPlayer;
+                cell.classList.add('taken', this.currentPlayer.toLowerCase());
+                
+                if (this.checkWin()) {
+                    this.gameActive = false;
+                    this.highlightWinningCells();
+                    this.updateGameStatus(`Player ${this.currentPlayer} wins! 🎉`);
+                    this.scores[this.currentPlayer]++;
+                    this.updateScoreBoard();
+                } else if (this.checkDraw()) {
+                    this.gameActive = false;
+                    this.updateGameStatus("It's a draw! 🤝");
+                    this.scores.draw++;
+                    this.updateScoreBoard();
+                } else {
+                    this.currentPlayer = this.currentPlayer === 'X' ? 'O' : 'X';
+                    this.updateGameStatus();
+                }
+            }
+            
+            checkWin() {
+                return this.winningConditions.some(condition => {
+                    const [a, b, c] = condition;
+                    if (this.board[a] && 
+                        this.board[a] === this.board[b] && 
+                        this.board[a] === this.board[c]) {
+                        this.winningCombination = condition;
+                        return true;
+                    }
+                    return false;
+                });
+            }
+            
+            checkDraw() {
+                return this.board.every(cell => cell !== '');
+            }
+            
+            highlightWinningCells() {
+                if (this.winningCombination) {
+                    this.winningCombination.forEach(index => {
+                        this.cells[index].classList.add('winning-cell');
+                    });
+                }
+            }
+            
+            updateGameStatus(message) {
+                if (message) {
+                    this.gameStatus.textContent = message;
+                } else {
+                    this.gameStatus.textContent = `Player ${this.currentPlayer}'s turn`;
+                }
+            }
+            
+            updateScoreBoard() {
+                this.scoreX.textContent = this.scores.X;
+                this.scoreO.textContent = this.scores.O;
+                this.scoreDraw.textContent = this.scores.draw;
+            }
+            
+            resetGame() {
+                this.board = Array(9).fill('');
+                this.currentPlayer = 'X';
+                this.gameActive = true;
+                this.winningCombination = null;
+                
+                this.cells.forEach(cell => {
+                    cell.textContent = '';
+                    cell.className = 'cell';
+                });
+                
+                this.updateGameStatus();
+            }
+            
+            resetScores() {
+                this.scores = { X: 0, O: 0, draw: 0 };
+                this.updateScoreBoard();
+            }
+        }
+        
+        // Initialize the game when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            const game = new TicTacToe();
+            
+            // Add double-click to reset scores
+            document.getElementById('resetBtn').addEventListener('dblclick', () => {
+                game.resetScores();
+            });
         });
-
-        // Initialize display
-        updateDisplay();
     </script>
 </body>
 </html>

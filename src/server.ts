@@ -14,7 +14,11 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname, '../../public')));
+
+// Determine if we're in development (ts-node) or production (compiled)
+const isDev = __dirname.includes('src');
+const publicPath = isDev ? path.join(__dirname, '../public') : path.join(__dirname, '../../public');
+app.use(express.static(publicPath));
 
 // API endpoint for code generation
 app.post('/api/generate', async (req, res) => {
@@ -32,7 +36,7 @@ app.post('/api/generate', async (req, res) => {
     const result = await generateCode(prompt);
     
     // Save generated files to output directory
-    const outputDir = path.join(__dirname, '../../output');
+    const outputDir = isDev ? path.join(__dirname, '../output') : path.join(__dirname, '../../output');
     if (!fs.existsSync(outputDir)) {
       fs.mkdirSync(outputDir, { recursive: true });
     }
@@ -70,8 +74,9 @@ app.post('/api/generate', async (req, res) => {
   }
 });
 
-// Serve output files
-app.use('/output', express.static(path.join(__dirname, '../../output')));
+// Serve output files  
+const outputPath = isDev ? path.join(__dirname, '../output') : path.join(__dirname, '../../output');
+app.use('/output', express.static(outputPath));
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
@@ -84,7 +89,8 @@ app.get('/api/health', (req, res) => {
 
 // Serve the main UI
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../../public/index.html'));
+  const indexPath = isDev ? path.join(__dirname, '../public/index.html') : path.join(__dirname, '../../public/index.html');
+  res.sendFile(indexPath);
 });
 
 // Start server

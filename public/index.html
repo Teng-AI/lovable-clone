@@ -163,10 +163,6 @@
             margin-bottom: 10px;
         }
 
-        .results-stats {
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 1rem;
-        }
 
         .files-grid {
             display: grid;
@@ -348,7 +344,7 @@
 </head>
 <body>
     <div class="hero-section">
-        <h1>Build something <span class="lovable-heart">❤️</span> Lovable</h1>
+        <h1>Loveable-clone <span class="lovable-heart">❤️</span></h1>
         <p class="tagline">Create apps and websites by chatting with AI</p>
     </div>
 
@@ -380,7 +376,6 @@
             <div id="resultsSection" class="results-section">
                 <div class="results-header">
                     <h2 class="results-title">Generated Code</h2>
-                    <div class="results-stats" id="resultsStats"></div>
                 </div>
                 <div id="filesGrid" class="files-grid"></div>
             </div>
@@ -508,12 +503,10 @@
             }
 
             displayResults(result) {
-                const statsEl = document.getElementById('resultsStats');
                 const filesGrid = document.getElementById('filesGrid');
                 const resultsSection = document.getElementById('resultsSection');
 
-                // Update stats
-                statsEl.textContent = `${result.files.length} files generated • ${result.dependencies.length} dependencies`;
+                // Stats removed per user request
 
                 // Clear previous results
                 filesGrid.innerHTML = '';
