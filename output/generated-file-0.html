@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>La Belle Cuisine - Fine Dining Restaurant</title>
+    <title>L'Excellence | Three Michelin Stars</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -11,450 +12,244 @@
             box-sizing: border-box;
         }
 
-        :root {
-            --primary-color: #c17817;
-            --secondary-color: #2c1810;
-            --text-color: #333;
-            --light-text: #666;
-            --background: #fff;
-        }
-
         body {
-            font-family: 'Lato', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Montserrat', sans-serif;
             line-height: 1.6;
-            color: var(--text-color);
+            color: #333;
+            background-color: #fafafa;
         }
 
-        /* Header & Navigation */
-        header {
-            background-color: var(--background);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            position: fixed;
-            width: 100%;
-            z-index: 1000;
-        }
-
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--primary-color);
-        }
-
-        nav ul {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-        }
-
-        nav a {
-            text-decoration: none;
-            color: var(--text-color);
-            font-weight: 500;
-            transition: color 0.3s ease;
-        }
-
-        nav a:hover {
-            color: var(--primary-color);
-        }
-
-        /* Hero Section */
-        .hero {
+        .header {
             height: 100vh;
-            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
-                        url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4') center/cover;
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+                        url('https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
             display: flex;
+            flex-direction: column;
+            justify-content: center;
             align-items: center;
             text-align: center;
             color: white;
         }
 
-        .hero-content {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        .hero h1 {
+        .logo {
+            font-family: 'Cormorant Garamond', serif;
             font-size: 3.5rem;
             margin-bottom: 1rem;
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards;
         }
 
-        .hero p {
+        .subtitle {
             font-size: 1.2rem;
             margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.5s forwards;
         }
 
         .cta-button {
-            display: inline-block;
-            padding: 1rem 2rem;
-            background-color: var(--primary-color);
+            background: transparent;
+            border: 2px solid white;
             color: white;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
             text-decoration: none;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
+            opacity: 0;
+            animation: fadeInUp 1s ease 1s forwards;
         }
 
         .cta-button:hover {
-            background-color: #a66615;
+            background: white;
+            color: #333;
         }
 
-        /* Menu Section */
-        .menu {
-            padding: 5rem 1rem;
+        .section {
+            padding: 6rem 2rem;
             max-width: 1200px;
             margin: 0 auto;
         }
 
         .section-title {
-            text-align: center;
+            font-family: 'Cormorant Garamond', serif;
             font-size: 2.5rem;
-            margin-bottom: 3rem;
-            color: var(--secondary-color);
+            margin-bottom: 2rem;
+            text-align: center;
         }
 
         .menu-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
-        }
-
-        .menu-category {
-            margin-bottom: 3rem;
-        }
-
-        .menu-category h3 {
-            font-size: 1.8rem;
-            color: var(--primary-color);
-            margin-bottom: 1.5rem;
-            text-align: center;
+            margin-top: 3rem;
         }
 
         .menu-item {
-            padding: 1rem;
-            border-bottom: 1px solid #eee;
+            background: white;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
         }
 
-        .menu-item h4 {
-            font-size: 1.2rem;
-            margin-bottom: 0.5rem;
+        .menu-item:hover {
+            transform: translateY(-5px);
         }
 
-        .menu-item p {
-            color: var(--light-text);
-            margin-bottom: 0.5rem;
-        }
-
-        .price {
-            color: var(--primary-color);
-            font-weight: 600;
-        }
-
-        /* Contact Section */
-        .contact {
-            background-color: #f9f9f9;
-            padding: 5rem 1rem;
-        }
-
-        .contact-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 3rem;
-        }
-
-        .contact-info {
-            line-height: 2;
-        }
-
-        .contact-info h3 {
-            color: var(--primary-color);
+        .menu-item h3 {
+            font-family: 'Cormorant Garamond', serif;
             margin-bottom: 1rem;
         }
 
-        .contact-form form {
-            display: grid;
-            gap: 1rem;
+        .reservation-form {
+            max-width: 600px;
+            margin: 0 auto;
         }
 
         .form-group {
-            display: flex;
-            flex-direction: column;
+            margin-bottom: 1.5rem;
         }
 
         .form-group label {
+            display: block;
             margin-bottom: 0.5rem;
         }
 
         .form-group input,
-        .form-group textarea {
+        .form-group select {
+            width: 100%;
             padding: 0.8rem;
             border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-
-        .submit-btn {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 1rem;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
             font-size: 1rem;
-            transition: background-color 0.3s ease;
         }
 
-        .submit-btn:hover {
-            background-color: #a66615;
-        }
-
-        /* Footer */
-        footer {
-            background-color: var(--secondary-color);
+        .submit-button {
+            background: #333;
             color: white;
-            padding: 2rem;
-            text-align: center;
-        }
-
-        /* Mobile Menu */
-        .mobile-menu-btn {
-            display: none;
-            background: none;
             border: none;
-            font-size: 1.5rem;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
             cursor: pointer;
-            color: var(--text-color);
+            transition: background 0.3s ease;
+            width: 100%;
         }
 
-        /* Media Queries */
+        .submit-button:hover {
+            background: #555;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         @media (max-width: 768px) {
-            .nav-container {
-                padding: 1rem;
-            }
-
-            .mobile-menu-btn {
-                display: block;
-            }
-
-            nav ul {
-                display: none;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                width: 100%;
-                background-color: white;
-                flex-direction: column;
-                padding: 1rem;
-                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            }
-
-            nav ul.active {
-                display: flex;
-            }
-
-            nav ul li {
-                margin: 0.5rem 0;
-            }
-
-            .hero h1 {
+            .logo {
                 font-size: 2.5rem;
             }
-
-            .menu-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .contact-container {
-                grid-template-columns: 1fr;
+            
+            .section {
+                padding: 4rem 1rem;
             }
         }
     </style>
 </head>
 <body>
-    <header>
-        <div class="nav-container">
-            <div class="logo">La Belle Cuisine</div>
-            <button class="mobile-menu-btn">☰</button>
-            <nav>
-                <ul>
-                    <li><a href="#home">Home</a></li>
-                    <li><a href="#menu">Menu</a></li>
-                    <li><a href="#contact">Contact</a></li>
-                    <li><a href="tel:+1234567890">Reservations</a></li>
-                </ul>
-            </nav>
-        </div>
+    <header class="header">
+        <h1 class="logo">L'Excellence</h1>
+        <p class="subtitle">Three Michelin Stars | A Culinary Journey</p>
+        <a href="#reservation" class="cta-button">Reserve a Table</a>
     </header>
 
-    <section id="home" class="hero">
-        <div class="hero-content">
-            <h1>Welcome to La Belle Cuisine</h1>
-            <p>Experience fine dining at its best with our exquisite French cuisine</p>
-            <a href="#menu" class="cta-button">View Menu</a>
-        </div>
-    </section>
-
-    <section id="menu" class="menu">
-        <h2 class="section-title">Our Menu</h2>
+    <section id="menu" class="section">
+        <h2 class="section-title">Our Tasting Menu</h2>
         <div class="menu-grid">
-            <div class="menu-category">
-                <h3>Appetizers</h3>
-                <div class="menu-item">
-                    <h4>French Onion Soup</h4>
-                    <p>Classic soup with caramelized onions, beef broth, and melted Gruyère</p>
-                    <span class="price">$12</span>
-                </div>
-                <div class="menu-item">
-                    <h4>Escargots de Bourgogne</h4>
-                    <p>Burgundy snails in garlic-herb butter</p>
-                    <span class="price">$16</span>
-                </div>
-                <div class="menu-item">
-                    <h4>Foie Gras</h4>
-                    <p>Duck liver pâté with brioche toast and fig jam</p>
-                    <span class="price">$24</span>
-                </div>
+            <div class="menu-item">
+                <h3>First Act</h3>
+                <p>Caviar served on a cloud of cauliflower cream, accompanied by champagne foam and gold leaf</p>
             </div>
-
-            <div class="menu-category">
-                <h3>Main Courses</h3>
-                <div class="menu-item">
-                    <h4>Coq au Vin</h4>
-                    <p>Braised chicken in red wine with mushrooms and pearl onions</p>
-                    <span class="price">$32</span>
-                </div>
-                <div class="menu-item">
-                    <h4>Beef Bourguignon</h4>
-                    <p>Classic beef stew in red wine sauce</p>
-                    <span class="price">$36</span>
-                </div>
-                <div class="menu-item">
-                    <h4>Duck à l'Orange</h4>
-                    <p>Roasted duck breast with orange sauce</p>
-                    <span class="price">$38</span>
-                </div>
+            <div class="menu-item">
+                <h3>Second Act</h3>
+                <p>Hand-dived scallops with Jerusalem artichoke purée, black truffle, and aged kombu</p>
             </div>
-
-            <div class="menu-category">
-                <h3>Desserts</h3>
-                <div class="menu-item">
-                    <h4>Crème Brûlée</h4>
-                    <p>Classic vanilla custard with caramelized sugar</p>
-                    <span class="price">$12</span>
-                </div>
-                <div class="menu-item">
-                    <h4>Tarte Tatin</h4>
-                    <p>Upside-down caramelized apple tart</p>
-                    <span class="price">$14</span>
-                </div>
-                <div class="menu-item">
-                    <h4>Chocolate Soufflé</h4>
-                    <p>Warm chocolate soufflé with vanilla ice cream</p>
-                    <span class="price">$16</span>
-                </div>
+            <div class="menu-item">
+                <h3>Third Act</h3>
+                <p>A5 Wagyu beef with wild mushrooms, bone marrow sauce, and seasonal vegetables</p>
             </div>
         </div>
     </section>
 
-    <section id="contact" class="contact">
-        <h2 class="section-title">Contact Us</h2>
-        <div class="contact-container">
-            <div class="contact-info">
-                <h3>Hours & Location</h3>
-                <p>123 Gourmet Street<br>New York, NY 10001</p>
-                <p>
-                    Monday - Friday: 5:00 PM - 10:00 PM<br>
-                    Saturday: 4:00 PM - 11:00 PM<br>
-                    Sunday: 4:00 PM - 9:00 PM
-                </p>
-                <h3>Reservations</h3>
-                <p>Phone: (123) 456-7890<br>
-                Email: reservations@labellecuisine.com</p>
+    <section id="reservation" class="section">
+        <h2 class="section-title">Make a Reservation</h2>
+        <form class="reservation-form" id="reservationForm">
+            <div class="form-group">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" required>
             </div>
-
-            <div class="contact-form">
-                <form id="reservationForm">
-                    <div class="form-group">
-                        <label for="name">Name</label>
-                        <input type="text" id="name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="date">Date</label>
-                        <input type="date" id="date" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="time">Time</label>
-                        <input type="time" id="time" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="guests">Number of Guests</label>
-                        <input type="number" id="guests" min="1" max="10" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="message">Special Requests</label>
-                        <textarea id="message" rows="4"></textarea>
-                    </div>
-                    <button type="submit" class="submit-btn">Make Reservation</button>
-                </form>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" required>
             </div>
-        </div>
+            <div class="form-group">
+                <label for="date">Date</label>
+                <input type="date" id="date" required>
+            </div>
+            <div class="form-group">
+                <label for="time">Time</label>
+                <select id="time" required>
+                    <option value="">Select time</option>
+                    <option value="18:00">6:00 PM</option>
+                    <option value="18:30">6:30 PM</option>
+                    <option value="19:00">7:00 PM</option>
+                    <option value="19:30">7:30 PM</option>
+                    <option value="20:00">8:00 PM</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="guests">Number of Guests</label>
+                <select id="guests" required>
+                    <option value="">Select number of guests</option>
+                    <option value="1">1 Person</option>
+                    <option value="2">2 People</option>
+                    <option value="3">3 People</option>
+                    <option value="4">4 People</option>
+                    <option value="5">5 People</option>
+                    <option value="6">6 People</option>
+                </select>
+            </div>
+            <button type="submit" class="submit-button">Request Reservation</button>
+        </form>
     </section>
-
-    <footer>
-        <p>&copy; 2024 La Belle Cuisine. All rights reserved.</p>
-    </footer>
 
     <script>
-        // Mobile Menu Toggle
-        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-        const navMenu = document.querySelector('nav ul');
-
-        mobileMenuBtn.addEventListener('click', () => {
-            navMenu.classList.toggle('active');
-        });
-
-        // Close mobile menu when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!e.target.closest('.nav-container')) {
-                navMenu.classList.remove('active');
-            }
-        });
-
-        // Smooth scrolling for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    window.scrollTo({
-                        top: target.offsetTop - 80,
-                        behavior: 'smooth'
-                    });
-                    // Close mobile menu after clicking a link
-                    navMenu.classList.remove('active');
-                }
-            });
-        });
-
-        // Reservation Form Handler
-        const reservationForm = document.getElementById('reservationForm');
-        reservationForm.addEventListener('submit', (e) => {
+        document.getElementById('reservationForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            alert('Thank you for your reservation request! We will contact you shortly to confirm.');
-            reservationForm.reset();
+            
+            // In a real implementation, this would send the data to a server
+            alert('Thank you for your reservation request. We will contact you shortly to confirm.');
+            this.reset();
+        });
+
+        // Set minimum date to today
+        const dateInput = document.getElementById('date');
+        const today = new Date().toISOString().split('T')[0];
+        dateInput.min = today;
+
+        // Smooth scroll for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
         });
     </script>
 </body>

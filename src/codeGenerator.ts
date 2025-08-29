@@ -27,7 +27,7 @@ Generate a complete, working implementation based on the user's request and show
         model: "claude-3-5-sonnet-20241022"
       }
     })) {
-      console.log('📝 Received message:', message);
+      console.log(`📝 Received message type: ${message.type}`);
       messages.push(message);
     }
     
@@ -39,17 +39,24 @@ Generate a complete, working implementation based on the user's request and show
 }
 
 function parseCodeFromMessages(messages: SDKMessage[]): GeneratedCode {
+  console.log(`📊 Total messages received: ${messages.length}`);
+  
   const files: GeneratedFile[] = [];
   const dependencies: string[] = [];
   let instructions = '';
+  let resultMessageCount = 0;
   
   for (const message of messages) {
-    // Only process the final result message to avoid duplicates
+    console.log(`📋 Message type: ${message.type}`);
+    
+    // ONLY process the final result message - ignore assistant messages to avoid duplicates
     if (message.type === 'result' && 'result' in message) {
-      console.log('🔍 Processing result message:', message.result.substring(0, 200) + '...');
+      resultMessageCount++;
+      console.log(`🔍 Processing result message #${resultMessageCount}:`, message.result.substring(0, 200) + '...');
       
       // Extract code blocks from the final result
       const codeBlocks = extractCodeBlocks(message.result);
+      console.log(`📄 Found ${codeBlocks.length} code blocks in this message`);
       files.push(...codeBlocks);
       
       const deps = extractDependencies(message.result);
@@ -58,16 +65,28 @@ function parseCodeFromMessages(messages: SDKMessage[]): GeneratedCode {
       if (message.result.includes('instructions') || message.result.includes('run') || message.result.includes('usage')) {
         instructions += message.result + '\n';
       }
+    } else {
+      console.log(`⏭️  Skipping ${message.type} message to avoid duplicates`);
     }
   }
+  
+  console.log(`📈 Found ${resultMessageCount} result messages total`);
+  
+  // Remove duplicate files based on content
+  const uniqueFiles = files.filter((file, index, arr) => {
+    const firstIndex = arr.findIndex(f => f.content === file.content);
+    return firstIndex === index;
+  });
+  
+  console.log(`🔄 Removed ${files.length - uniqueFiles.length} duplicate files`);
   
   // Remove duplicates
   const uniqueDeps = [...new Set(dependencies)];
   
-  console.log(`✅ Parsed ${files.length} files and ${uniqueDeps.length} dependencies`);
+  console.log(`✅ Final result: ${uniqueFiles.length} files and ${uniqueDeps.length} dependencies`);
   
   return {
-    files,
+    files: uniqueFiles,
     dependencies: uniqueDeps,
     instructions: instructions.trim()
   };
