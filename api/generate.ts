@@ -1,5 +1,5 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
-import { generateCode } from '../src/codeGenerator';
+import { generateCodeWithAnthropicAPI } from '../src/anthropicGenerator';
 
 // CORS headers for the API
 const corsHeaders = {
@@ -55,8 +55,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     
     console.log('🔑 API key available:', apiKey.substring(0, 8) + '...');
     
-    // Generate code using Claude Code SDK
-    const result = await generateCode(prompt);
+    // Generate code using Anthropic API directly (for Vercel compatibility)
+    const result = await generateCodeWithAnthropicAPI(prompt);
     
     console.log(`✅ Generated ${result.files.length} files`);
 
